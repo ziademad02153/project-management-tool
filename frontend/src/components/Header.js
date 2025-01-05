@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -19,7 +19,6 @@ import {
 import {
   Menu as MenuIcon,
   Notifications as NotificationsIcon,
-  AccountCircle,
   ExitToApp as LogoutIcon,
   Settings as SettingsIcon,
   Person as PersonIcon,
@@ -36,7 +35,7 @@ const Header = ({ title }) => {
   const [openSidebar, setOpenSidebar] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [notificationsAnchor, setNotificationsAnchor] = useState(null);
-  const [notifications, setNotifications] = useState([
+  const [notifications] = useState([
     {
       id: 1,
       type: 'task',
