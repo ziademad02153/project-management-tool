@@ -7,7 +7,7 @@ import theme from './theme/theme';
 import { BrowserRouter } from 'react-router-dom';
 import emailjs from '@emailjs/browser';
 
-// تهيئة EmailJS
+// Initialize EmailJS
 emailjs.init('service_wpz9new');
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

@@ -1,7 +1,7 @@
 import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
-  direction: 'rtl',
+  direction: 'ltr',
   palette: {
     primary: {
       main: '#2563eb',
@@ -55,7 +55,7 @@ const theme = createTheme({
     }
   },
   typography: {
-    fontFamily: 'Cairo, sans-serif',
+    fontFamily: 'Roboto, sans-serif',
     h1: {
       fontSize: '2.5rem',
       fontWeight: 700,

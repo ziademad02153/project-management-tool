@@ -13,7 +13,7 @@ import Profile from './pages/Profile';
 import Analytics from './pages/Analytics';
 
 const theme = createTheme({
-  direction: 'rtl',
+  direction: 'ltr',
   palette: {
     primary: {
       main: '#1976d2',

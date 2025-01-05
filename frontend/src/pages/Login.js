@@ -40,7 +40,7 @@ const Login = () => {
       localStorage.setItem('token', response.data.token);
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.msg || 'Login failed');
+      setError(err.response?.data?.msg || 'An error occurred while logging in');
     }
   };
 
@@ -116,11 +116,8 @@ const Login = () => {
               Login
             </Button>
             <Box sx={{ textAlign: 'center' }}>
-              <Link href="/forgot-password" variant="body2" sx={{ mr: 2 }}>
-                Forgot Password?
-              </Link>
               <Link href="/register" variant="body2">
-                Don't have an account? Sign Up
+                {"Don't have an account? Sign Up"}
               </Link>
             </Box>
           </form>
