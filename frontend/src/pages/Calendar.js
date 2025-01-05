@@ -21,13 +21,13 @@ import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 import startOfWeek from 'date-fns/startOfWeek';
 import getDay from 'date-fns/getDay';
-import { ar } from 'date-fns/locale';
+import { enUS } from 'date-fns/locale';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import axios from 'axios';
 import Layout from '../components/Layout';
 
 const locales = {
-  'ar': ar
+  'en-US': enUS
 };
 
 const localizer = dateFnsLocalizer({
@@ -71,7 +71,7 @@ const Calendar = () => {
       })));
       setLoading(false);
     } catch (error) {
-      setError('حدث خطأ في جلب الأحداث');
+      setError('An error occurred while fetching events');
       setLoading(false);
     }
   };
@@ -87,7 +87,7 @@ const Calendar = () => {
       await axios.post('http://localhost:5000/api/events', newEvent, {
         headers: { 'x-auth-token': token }
       });
-      setSuccess('تم إنشاء الحدث بنجاح');
+      setSuccess('Event created successfully');
       setOpenEventDialog(false);
       setNewEvent({
         title: '',
@@ -99,30 +99,30 @@ const Calendar = () => {
       fetchEvents();
       setTimeout(() => setSuccess(''), 3000);
     } catch (error) {
-      setError('حدث خطأ في إنشاء الحدث');
+      setError('An error occurred while creating the event');
     }
   };
 
   const handleDeleteEvent = async () => {
-    if (window.confirm('هل أنت متأكد من حذف هذا الحدث؟')) {
+    if (window.confirm('Are you sure you want to delete this event?')) {
       try {
         const token = localStorage.getItem('token');
         await axios.delete(`http://localhost:5000/api/events/${selectedEvent._id}`, {
           headers: { 'x-auth-token': token }
         });
-        setSuccess('تم حذف الحدث بنجاح');
+        setSuccess('Event deleted successfully');
         setOpenEventDialog(false);
         fetchEvents();
         setTimeout(() => setSuccess(''), 3000);
       } catch (error) {
-        setError('حدث خطأ في حذف الحدث');
+        setError('An error occurred while deleting the event');
       }
     }
   };
 
   if (loading) {
     return (
-      <Layout title="التقويم">
+      <Layout title="Calendar">
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
           <CircularProgress />
         </Box>
@@ -131,13 +131,13 @@ const Calendar = () => {
   }
 
   return (
-    <Layout title="التقويم">
+    <Layout title="Calendar">
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
 
       <Paper sx={{ p: 2, height: 'calc(100vh - 200px)' }}>
         <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant="h6">التقويم</Typography>
+          <Typography variant="h6">Calendar</Typography>
           <Button
             variant="contained"
             onClick={() => {
@@ -145,7 +145,7 @@ const Calendar = () => {
               setOpenEventDialog(true);
             }}
           >
-            إضافة حدث
+            Add Event
           </Button>
         </Box>
 
@@ -157,30 +157,30 @@ const Calendar = () => {
           style={{ height: '100%' }}
           onSelectEvent={handleEventSelect}
           messages={{
-            next: "التالي",
-            previous: "السابق",
-            today: "اليوم",
-            month: "شهر",
-            week: "أسبوع",
-            day: "يوم",
-            agenda: "الأجندة",
-            date: "التاريخ",
-            time: "الوقت",
-            event: "الحدث",
-            noEventsInRange: "لا توجد أحداث في هذه الفترة"
+            next: "Next",
+            previous: "Previous",
+            today: "Today",
+            month: "Month",
+            week: "Week",
+            day: "Day",
+            agenda: "Agenda",
+            date: "Date",
+            time: "Time",
+            event: "Event",
+            noEventsInRange: "No events in this range"
           }}
         />
       </Paper>
 
       <Dialog open={openEventDialog} onClose={() => setOpenEventDialog(false)} maxWidth="sm" fullWidth>
         <DialogTitle>
-          {selectedEvent ? 'تفاصيل الحدث' : 'إضافة حدث جديد'}
+          {selectedEvent ? 'Event Details' : 'Add New Event'}
         </DialogTitle>
         <DialogContent>
           <Box sx={{ mt: 2 }}>
             <TextField
               fullWidth
-              label="عنوان الحدث"
+              label="Event Title"
               value={selectedEvent ? selectedEvent.title : newEvent.title}
               onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
               disabled={!!selectedEvent}
@@ -188,7 +188,7 @@ const Calendar = () => {
             />
             <TextField
               fullWidth
-              label="الوصف"
+              label="Description"
               multiline
               rows={4}
               value={selectedEvent ? selectedEvent.description : newEvent.description}
@@ -197,21 +197,21 @@ const Calendar = () => {
               sx={{ mb: 2 }}
             />
             <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel>نوع الحدث</InputLabel>
+              <InputLabel>Event Type</InputLabel>
               <Select
                 value={selectedEvent ? selectedEvent.type : newEvent.type}
-                label="نوع الحدث"
+                label="Event Type"
                 onChange={(e) => setNewEvent({ ...newEvent, type: e.target.value })}
                 disabled={!!selectedEvent}
               >
-                <MenuItem value="meeting">اجتماع</MenuItem>
-                <MenuItem value="deadline">موعد نهائي</MenuItem>
-                <MenuItem value="reminder">تذكير</MenuItem>
+                <MenuItem value="meeting">Meeting</MenuItem>
+                <MenuItem value="deadline">Deadline</MenuItem>
+                <MenuItem value="reminder">Reminder</MenuItem>
               </Select>
             </FormControl>
             <TextField
               fullWidth
-              label="تاريخ البداية"
+              label="Start Date"
               type="datetime-local"
               value={format(selectedEvent ? new Date(selectedEvent.start) : newEvent.start, "yyyy-MM-dd'T'HH:mm")}
               onChange={(e) => setNewEvent({ ...newEvent, start: new Date(e.target.value) })}
@@ -221,7 +221,7 @@ const Calendar = () => {
             />
             <TextField
               fullWidth
-              label="تاريخ النهاية"
+              label="End Date"
               type="datetime-local"
               value={format(selectedEvent ? new Date(selectedEvent.end) : newEvent.end, "yyyy-MM-dd'T'HH:mm")}
               onChange={(e) => setNewEvent({ ...newEvent, end: new Date(e.target.value) })}
@@ -234,19 +234,19 @@ const Calendar = () => {
           {selectedEvent ? (
             <>
               <Button onClick={handleDeleteEvent} color="error">
-                حذف
+                Delete
               </Button>
               <Button onClick={() => setOpenEventDialog(false)}>
-                إغلاق
+                Close
               </Button>
             </>
           ) : (
             <>
               <Button onClick={() => setOpenEventDialog(false)}>
-                إلغاء
+                Cancel
               </Button>
               <Button onClick={handleCreateEvent} variant="contained">
-                إضافة
+                Add
               </Button>
             </>
           )}

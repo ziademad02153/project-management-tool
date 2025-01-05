@@ -44,7 +44,7 @@ const Notifications = () => {
       setNotifications(response.data);
       setLoading(false);
     } catch (error) {
-      setError('حدث خطأ في جلب الإشعارات');
+      setError('An error occurred while fetching notifications');
       setLoading(false);
     }
   };
@@ -55,11 +55,11 @@ const Notifications = () => {
       await axios.delete(`http://localhost:5000/api/notifications/${id}`, {
         headers: { 'x-auth-token': token }
       });
-      setSuccess('تم حذف الإشعار بنجاح');
+      setSuccess('Notification deleted successfully');
       setNotifications(notifications.filter(notification => notification._id !== id));
       setTimeout(() => setSuccess(''), 3000);
     } catch (error) {
-      setError('حدث خطأ في حذف الإشعار');
+      setError('An error occurred while deleting the notification');
     }
   };
 
@@ -91,7 +91,7 @@ const Notifications = () => {
 
   if (loading) {
     return (
-      <Layout title="الإشعارات">
+      <Layout title="Notifications">
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
           <CircularProgress />
         </Box>
@@ -100,7 +100,7 @@ const Notifications = () => {
   }
 
   return (
-    <Layout title="الإشعارات">
+    <Layout title="Notifications">
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
 
@@ -109,7 +109,7 @@ const Notifications = () => {
           <Box sx={{ textAlign: 'center', py: 4 }}>
             <NotificationsIcon sx={{ fontSize: 60, color: 'text.secondary', mb: 2 }} />
             <Typography color="textSecondary">
-              لا توجد إشعارات جديدة
+              No new notifications
             </Typography>
           </Box>
         ) : (
@@ -137,7 +137,7 @@ const Notifications = () => {
                         })}
                       </Typography>
                       <Chip
-                        label={notification.type === 'task' ? 'مهمة' : notification.type === 'project' ? 'مشروع' : 'تعليق'}
+                        label={notification.type === 'task' ? 'Task' : notification.type === 'project' ? 'Project' : 'Comment'}
                         size="small"
                         color={getNotificationColor(notification.type)}
                       />

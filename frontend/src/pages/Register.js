@@ -35,9 +35,9 @@ const Register = () => {
     setError('');
     setSuccess('');
 
-    // التحقق من تطابق كلمات المرور
+    // Check if passwords match
     if (formData.password !== formData.confirmPassword) {
-      setError('كلمات المرور غير متطابقة');
+      setError('Passwords do not match');
       return;
     }
 
@@ -48,15 +48,15 @@ const Register = () => {
         password: formData.password
       });
 
-      setSuccess('تم إنشاء الحساب بنجاح! جاري تحويلك إلى صفحة تسجيل الدخول...');
+      setSuccess('Account created successfully! Redirecting to login page...');
       
-      // التحويل إلى صفحة تسجيل الدخول بعد ثانيتين
+      // Redirect to login page after 2 seconds
       setTimeout(() => {
         navigate('/login');
       }, 2000);
 
     } catch (err) {
-      setError(err.response?.data?.msg || 'حدث خطأ في إنشاء الحساب');
+      setError(err.response?.data?.msg || 'An error occurred while creating the account');
     }
   };
 
@@ -72,7 +72,7 @@ const Register = () => {
       >
         <Paper elevation={3} sx={{ padding: 4, width: '100%' }}>
           <Typography component="h1" variant="h5" align="center" gutterBottom>
-            إنشاء حساب جديد
+            Create New Account
           </Typography>
 
           {error && (
@@ -93,7 +93,7 @@ const Register = () => {
               required
               fullWidth
               id="username"
-              label="اسم المستخدم"
+              label="Username"
               name="username"
               autoComplete="username"
               autoFocus
@@ -106,7 +106,7 @@ const Register = () => {
               required
               fullWidth
               id="email"
-              label="البريد الإلكتروني"
+              label="Email"
               name="email"
               autoComplete="email"
               value={formData.email}
@@ -118,7 +118,7 @@ const Register = () => {
               required
               fullWidth
               name="password"
-              label="كلمة المرور"
+              label="Password"
               type="password"
               id="password"
               autoComplete="new-password"
@@ -131,7 +131,7 @@ const Register = () => {
               required
               fullWidth
               name="confirmPassword"
-              label="تأكيد كلمة المرور"
+              label="Confirm Password"
               type="password"
               id="confirmPassword"
               autoComplete="new-password"
@@ -145,11 +145,11 @@ const Register = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              إنشاء حساب
+              Create Account
             </Button>
             <Box textAlign="center">
               <Link href="/login" variant="body2">
-                {"لديك حساب بالفعل؟ سجل دخولك"}
+                {"Already have an account? Login"}
               </Link>
             </Box>
           </form>

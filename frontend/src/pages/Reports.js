@@ -58,7 +58,7 @@ const Reports = () => {
       setStats(response.data);
       setLoading(false);
     } catch (error) {
-      setError('حدث خطأ في جلب الإحصائيات');
+      setError('An error occurred while fetching statistics');
       setLoading(false);
     }
   };
@@ -77,18 +77,18 @@ const Reports = () => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `تقرير_${reportType}_${period}_${format(new Date(), 'yyyy-MM-dd')}.pdf`);
+      link.setAttribute('download', `report_${reportType}_${period}_${format(new Date(), 'yyyy-MM-dd')}.pdf`);
       document.body.appendChild(link);
       link.click();
       link.remove();
     } catch (error) {
-      setError('حدث خطأ في تحميل التقرير');
+      setError('An error occurred while downloading the report');
     }
   };
 
   if (loading) {
     return (
-      <Layout title="التقارير والإحصائيات">
+      <Layout title="Reports & Statistics">
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
           <CircularProgress />
         </Box>
@@ -97,36 +97,36 @@ const Reports = () => {
   }
 
   return (
-    <Layout title="التقارير والإحصائيات">
+    <Layout title="Reports & Statistics">
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
       <Box sx={{ mb: 4 }}>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} md={3}>
             <FormControl fullWidth>
-              <InputLabel>نوع التقرير</InputLabel>
+              <InputLabel>Report Type</InputLabel>
               <Select
                 value={reportType}
-                label="نوع التقرير"
+                label="Report Type"
                 onChange={(e) => setReportType(e.target.value)}
               >
-                <MenuItem value="tasks">المهام</MenuItem>
-                <MenuItem value="projects">المشاريع</MenuItem>
-                <MenuItem value="teams">الفرق</MenuItem>
+                <MenuItem value="tasks">Tasks</MenuItem>
+                <MenuItem value="projects">Projects</MenuItem>
+                <MenuItem value="teams">Teams</MenuItem>
               </Select>
             </FormControl>
           </Grid>
           <Grid item xs={12} md={3}>
             <FormControl fullWidth>
-              <InputLabel>الفترة الزمنية</InputLabel>
+              <InputLabel>Time Period</InputLabel>
               <Select
                 value={period}
-                label="الفترة الزمنية"
+                label="Time Period"
                 onChange={(e) => setPeriod(e.target.value)}
               >
-                <MenuItem value="week">أسبوع</MenuItem>
-                <MenuItem value="month">شهر</MenuItem>
-                <MenuItem value="year">سنة</MenuItem>
+                <MenuItem value="week">Week</MenuItem>
+                <MenuItem value="month">Month</MenuItem>
+                <MenuItem value="year">Year</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -137,7 +137,7 @@ const Reports = () => {
               onClick={downloadReport}
               fullWidth
             >
-              تحميل التقرير
+              Download Report
             </Button>
           </Grid>
         </Grid>
@@ -147,7 +147,7 @@ const Reports = () => {
         <Grid item xs={12} md={6}>
           <Paper sx={{ p: 2 }}>
             <Typography variant="h6" gutterBottom>
-              توزيع الحالات
+              Status Distribution
             </Typography>
             <Box sx={{ height: 300, display: 'flex', justifyContent: 'center' }}>
               <PieChart width={400} height={300}>
@@ -175,7 +175,7 @@ const Reports = () => {
         <Grid item xs={12} md={6}>
           <Paper sx={{ p: 2 }}>
             <Typography variant="h6" gutterBottom>
-              النشاط خلال الفترة
+              Activity Over Period
             </Typography>
             <Box sx={{ height: 300, display: 'flex', justifyContent: 'center' }}>
               <BarChart
@@ -189,8 +189,8 @@ const Reports = () => {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="completed" name="مكتمل" fill="#00C49F" />
-                <Bar dataKey="pending" name="معلق" fill="#FFBB28" />
+                <Bar dataKey="completed" name="Completed" fill="#00C49F" />
+                <Bar dataKey="pending" name="Pending" fill="#FFBB28" />
               </BarChart>
             </Box>
           </Paper>
@@ -199,7 +199,7 @@ const Reports = () => {
         <Grid item xs={12}>
           <Paper sx={{ p: 2 }}>
             <Typography variant="h6" gutterBottom>
-              ملخص الإحصائيات
+              Statistics Summary
             </Typography>
             <Grid container spacing={3}>
               {stats?.summary.map((item, index) => (
@@ -213,7 +213,7 @@ const Reports = () => {
                         {item.value}
                       </Typography>
                       <Typography variant="body2" color={item.change >= 0 ? 'success.main' : 'error.main'}>
-                        {item.change >= 0 ? '+' : ''}{item.change}% مقارنة بالفترة السابقة
+                        {item.change >= 0 ? '+' : ''}{item.change}% compared to previous period
                       </Typography>
                     </CardContent>
                   </Card>

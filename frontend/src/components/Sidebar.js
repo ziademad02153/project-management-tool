@@ -28,11 +28,11 @@ const Sidebar = ({ open, onClose }) => {
   };
 
   const menuItems = [
-    { text: 'لوحة التحكم', icon: <DashboardIcon />, path: '/dashboard' },
-    { text: 'المهام', icon: <AssignmentIcon />, path: '/tasks' },
-    { text: 'الإشعارات', icon: <NotificationsIcon />, path: '/notifications' },
-    { text: 'التحليلات', icon: <AnalyticsIcon />, path: '/analytics' },
-    { text: 'الملف الشخصي', icon: <ProfileIcon />, path: '/profile' }
+    { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
+    { text: 'Tasks', icon: <AssignmentIcon />, path: '/tasks' },
+    { text: 'Notifications', icon: <NotificationsIcon />, path: '/notifications' },
+    { text: 'Analytics', icon: <AnalyticsIcon />, path: '/analytics' },
+    { text: 'Profile', icon: <ProfileIcon />, path: '/profile' }
   ];
 
   return (
@@ -49,7 +49,7 @@ const Sidebar = ({ open, onClose }) => {
     >
       <Box sx={{ p: 2 }}>
         <Typography variant="h6" component="div">
-          نظام إدارة المشاريع
+          Project Management System
         </Typography>
       </Box>
       <Divider />
@@ -72,7 +72,7 @@ const Sidebar = ({ open, onClose }) => {
           <ListItemIcon>
             <LogoutIcon />
           </ListItemIcon>
-          <ListItemText primary="تسجيل الخروج" />
+          <ListItemText primary="Logout" />
         </ListItem>
       </List>
     </Drawer>

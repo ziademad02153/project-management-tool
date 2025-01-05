@@ -123,14 +123,14 @@ const Tasks = () => {
   };
 
   return (
-    <Layout title="المهام">
+    <Layout title="Tasks">
       <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Button
           variant="contained"
           startIcon={<AddIcon />}
           onClick={() => setOpenNewTask(true)}
         >
-          مهمة جديدة
+          New Task
         </Button>
       </Box>
 
@@ -157,7 +157,7 @@ const Tasks = () => {
 
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Typography variant="body2" color="textSecondary">
-                  تاريخ الاستحقاق: {new Date(task.dueDate).toLocaleDateString('ar-EG')}
+                  Due Date: {new Date(task.dueDate).toLocaleDateString('en-US')}
                 </Typography>
                 
                 <Box>
@@ -181,19 +181,19 @@ const Tasks = () => {
       </Grid>
 
       <Dialog open={openNewTask} onClose={() => setOpenNewTask(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>إضافة مهمة جديدة</DialogTitle>
+        <DialogTitle>Add New Task</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
-            label="عنوان المهمة"
+            label="Task Title"
             fullWidth
             value={newTask.title}
             onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
           />
           <TextField
             margin="dense"
-            label="وصف المهمة"
+            label="Task Description"
             fullWidth
             multiline
             rows={4}
@@ -201,7 +201,7 @@ const Tasks = () => {
             onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
           />
           <FormControl fullWidth margin="dense">
-            <InputLabel>المشروع</InputLabel>
+            <InputLabel>Project</InputLabel>
             <Select
               value={newTask.project}
               onChange={(e) => setNewTask({ ...newTask, project: e.target.value })}
@@ -214,19 +214,19 @@ const Tasks = () => {
             </Select>
           </FormControl>
           <FormControl fullWidth margin="dense">
-            <InputLabel>الأولوية</InputLabel>
+            <InputLabel>Priority</InputLabel>
             <Select
               value={newTask.priority}
               onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}
             >
-              <MenuItem value="high">عالية</MenuItem>
-              <MenuItem value="medium">متوسطة</MenuItem>
-              <MenuItem value="low">منخفضة</MenuItem>
+              <MenuItem value="high">High</MenuItem>
+              <MenuItem value="medium">Medium</MenuItem>
+              <MenuItem value="low">Low</MenuItem>
             </Select>
           </FormControl>
           <TextField
             margin="dense"
-            label="تاريخ الاستحقاق"
+            label="Due Date"
             type="date"
             fullWidth
             InputLabelProps={{
@@ -237,9 +237,9 @@ const Tasks = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenNewTask(false)}>إلغاء</Button>
+          <Button onClick={() => setOpenNewTask(false)}>Cancel</Button>
           <Button onClick={handleCreateTask} variant="contained">
-            إضافة
+            Add
           </Button>
         </DialogActions>
       </Dialog>
