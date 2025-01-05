@@ -13,10 +13,8 @@
     }
   ],
   "env": {
-    "EMAIL_USER": "your-email@gmail.com",
-    "EMAIL_PASS": "your-app-password",
-    "FRONTEND_URL": "https://z-project-management-tool.netlify.app",
-    "MONGODB_URI": "mongodb+srv://ziademad02153:Zz01152753977@cluster0.1bvtd0i.mongodb.net/project-management?retryWrites=true&w=majority",
-    "JWT_SECRET": "your-secret-key"
+    "MONGODB_URI": "@mongodb_uri",
+    "JWT_SECRET": "@jwt_secret",
+    "FRONTEND_URL": "https://z-project-management-tool.netlify.app"
   }
 }
