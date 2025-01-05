@@ -25,17 +25,17 @@ const ForgotPassword = () => {
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/users/forgot-password`, { email });
       
-      // إرسال البريد باستخدام EmailJS
+      // Send email using EmailJS
       const templateParams = {
         to_email: response.data.email,
         reset_link: response.data.resetUrl
       };
 
       await emailjs.send('service_wpz9new', 'template_qfedpyb', templateParams);
-      setSuccess('تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني');
+      setSuccess('Password reset link has been sent to your email');
     } catch (err) {
       console.error('Error:', err);
-      setError(err.response?.data?.msg || 'حدث خطأ في إرسال رابط إعادة تعيين كلمة المرور');
+      setError(err.response?.data?.msg || 'Error sending password reset link');
     }
   };
 
@@ -51,7 +51,7 @@ const ForgotPassword = () => {
       >
         <Paper elevation={3} sx={{ padding: 4, width: '100%' }}>
           <Typography component="h1" variant="h5" align="center" gutterBottom>
-            نسيت كلمة المرور
+            Forgot Password
           </Typography>
 
           {error && (
@@ -72,7 +72,7 @@ const ForgotPassword = () => {
               required
               fullWidth
               id="email"
-              label="البريد الإلكتروني"
+              label="Email Address"
               name="email"
               autoComplete="email"
               autoFocus
@@ -85,11 +85,11 @@ const ForgotPassword = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              إرسال رابط إعادة تعيين كلمة المرور
+              Send Reset Link
             </Button>
             <Box sx={{ textAlign: 'center' }}>
               <Link href="/login" variant="body2">
-                العودة إلى تسجيل الدخول
+                Back to Login
               </Link>
             </Box>
           </form>

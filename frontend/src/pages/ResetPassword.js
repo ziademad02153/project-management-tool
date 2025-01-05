@@ -12,46 +12,34 @@ import {
 import axios from 'axios';
 
 const ResetPassword = () => {
-  const { token } = useParams();
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    password: '',
-    confirmPassword: ''
-  });
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const { token } = useParams();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
 
-    if (formData.password !== formData.confirmPassword) {
-      setError('كلمات المرور غير متطابقة');
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
       return;
     }
 
     try {
       await axios.post(`${process.env.REACT_APP_API_URL}/api/users/reset-password/${token}`, {
-        password: formData.password
+        password
       });
-
-      setSuccess('تم تغيير كلمة المرور بنجاح! جاري تحويلك إلى صفحة تسجيل الدخول...');
-      
+      setSuccess('Password has been reset successfully');
       setTimeout(() => {
         navigate('/login');
       }, 2000);
-
     } catch (err) {
-      setError(err.response?.data?.msg || 'حدث خطأ في تغيير كلمة المرور');
+      setError(err.response?.data?.msg || 'Error resetting password');
     }
-  };
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
   };
 
   return (
@@ -66,7 +54,7 @@ const ResetPassword = () => {
       >
         <Paper elevation={3} sx={{ padding: 4, width: '100%' }}>
           <Typography component="h1" variant="h5" align="center" gutterBottom>
-            تعيين كلمة المرور الجديدة
+            Reset Password
           </Typography>
 
           {error && (
@@ -87,22 +75,23 @@ const ResetPassword = () => {
               required
               fullWidth
               name="password"
-              label="كلمة المرور الجديدة"
+              label="New Password"
               type="password"
               id="password"
-              value={formData.password}
-              onChange={handleChange}
+              autoComplete="new-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <TextField
               margin="normal"
               required
               fullWidth
               name="confirmPassword"
-              label="تأكيد كلمة المرور الجديدة"
+              label="Confirm Password"
               type="password"
               id="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
             <Button
               type="submit"
@@ -110,7 +99,7 @@ const ResetPassword = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              تغيير كلمة المرور
+              Reset Password
             </Button>
           </form>
         </Paper>
