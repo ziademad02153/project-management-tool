@@ -93,9 +93,12 @@ const Login = () => {
             >
               تسجيل الدخول
             </Button>
-            <Box textAlign="center">
-              <Link href="/register" variant="body2">
-                {"ليس لديك حساب؟ سجل الآن"}
+            <Box sx={{ textAlign: 'center', mt: 2 }}>
+              <Link href="/register" variant="body2" sx={{ mr: 2 }}>
+                ليس لديك حساب؟ سجل الآن
+              </Link>
+              <Link href="/forgot-password" variant="body2">
+                نسيت كلمة المرور؟
               </Link>
             </Box>
           </form>

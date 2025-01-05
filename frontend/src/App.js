@@ -4,6 +4,8 @@ import { ThemeProvider, createTheme } from '@mui/material';
 import { CssBaseline } from '@mui/material';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import Dashboard from './pages/Dashboard';
 import Tasks from './pages/Tasks';
 import Notifications from './pages/Notifications';
@@ -30,6 +32,8 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/tasks" element={<Tasks />} />
           <Route path="/notifications" element={<Notifications />} />

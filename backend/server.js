@@ -42,11 +42,19 @@ mongoose.connect(process.env.MONGODB_URI)
   .catch(err => console.error('MongoDB connection error:', err));
 
 // Routes
-app.use('/api/users', require('./src/routes/users'));
-app.use('/api/projects', require('./src/routes/projects'));
-app.use('/api/tasks', require('./src/routes/tasks'));
-app.use('/api/notifications', require('./src/routes/notifications'));
-app.use('/api/analytics', require('./src/routes/analytics'));
+const userRoutes = require('./src/routes/users');
+const projectRoutes = require('./src/routes/projects');
+const taskRoutes = require('./src/routes/tasks');
+const notificationRoutes = require('./src/routes/notifications');
+const analyticsRoutes = require('./src/routes/analytics');
+const passwordResetRoutes = require('./src/routes/passwordReset');
+
+app.use('/api/users', userRoutes);
+app.use('/api/password-reset', passwordResetRoutes);
+app.use('/api/projects', projectRoutes);
+app.use('/api/tasks', taskRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 // Health check route
 app.get('/api/health', (req, res) => {
