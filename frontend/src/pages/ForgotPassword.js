@@ -10,6 +10,7 @@ import {
   Link
 } from '@mui/material';
 import axios from 'axios';
+import emailjs from '@emailjs/browser';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -22,9 +23,18 @@ const ForgotPassword = () => {
     setSuccess('');
 
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}/api/users/forgot-password`, { email });
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/users/forgot-password`, { email });
+      
+      // إرسال البريد باستخدام EmailJS
+      const templateParams = {
+        to_email: response.data.email,
+        reset_link: response.data.resetUrl
+      };
+
+      await emailjs.send('service_wpz9new', 'template_qfedpyb', templateParams);
       setSuccess('تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني');
     } catch (err) {
+      console.error('Error:', err);
       setError(err.response?.data?.msg || 'حدث خطأ في إرسال رابط إعادة تعيين كلمة المرور');
     }
   };

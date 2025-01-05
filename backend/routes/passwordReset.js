@@ -1,18 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
-const nodemailer = require('nodemailer');
 const User = require('../models/User');
 const Token = require('../models/Token');
-
-// إعداد Nodemailer
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
 
 // طلب إعادة تعيين كلمة المرور
 router.post('/forgot-password', async (req, res) => {
@@ -32,22 +22,13 @@ router.post('/forgot-password', async (req, res) => {
       expiresAt: Date.now() + 3600000 // ينتهي بعد ساعة
     });
 
-    // إرسال البريد الإلكتروني
-    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: user.email,
-      subject: 'إعادة تعيين كلمة المرور',
-      html: `
-        <h1>طلب إعادة تعيين كلمة المرور</h1>
-        <p>لإعادة تعيين كلمة المرور الخاصة بك، انقر على الرابط التالي:</p>
-        <a href="${resetUrl}">إعادة تعيين كلمة المرور</a>
-        <p>هذا الرابط صالح لمدة ساعة واحدة فقط.</p>
-      `
-    };
-
-    await transporter.sendMail(mailOptions);
-    res.json({ msg: 'تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني' });
+    // إرسال رابط إعادة تعيين كلمة المرور مباشرة للمستخدم
+    const resetUrl = `https://z-project-management-tool.netlify.app/reset-password/${resetToken}`;
+    res.json({ 
+      msg: 'تم إنشاء رابط إعادة تعيين كلمة المرور',
+      resetUrl: resetUrl,
+      email: user.email
+    });
 
   } catch (err) {
     console.error(err);
