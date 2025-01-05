@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   Container,
   Paper,
@@ -7,9 +6,14 @@ import {
   Button,
   Typography,
   Box,
-  Link
+  Alert,
+  Link,
+  InputAdornment,
+  IconButton
 } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -18,6 +22,7 @@ const Login = () => {
     password: ''
   });
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -28,13 +33,19 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+
     try {
-      const response = await axios.post('http://localhost:5000/api/users/login', formData);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/users/login`, formData);
       localStorage.setItem('token', response.data.token);
-      navigate('/dashboard');
+      navigate('/');
     } catch (err) {
-      setError(err.response?.data?.message || 'حدث خطأ في تسجيل الدخول');
+      setError(err.response?.data?.msg || 'Login failed');
     }
+  };
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -49,13 +60,13 @@ const Login = () => {
       >
         <Paper elevation={3} sx={{ padding: 4, width: '100%' }}>
           <Typography component="h1" variant="h5" align="center" gutterBottom>
-            تسجيل الدخول
+            Login
           </Typography>
-          
+
           {error && (
-            <Typography color="error" align="center" gutterBottom>
+            <Alert severity="error" sx={{ mb: 2 }}>
               {error}
-            </Typography>
+            </Alert>
           )}
 
           <form onSubmit={handleSubmit}>
@@ -64,26 +75,37 @@ const Login = () => {
               required
               fullWidth
               id="email"
-              label="البريد الإلكتروني"
+              label="Email Address"
               name="email"
               autoComplete="email"
               autoFocus
               value={formData.email}
               onChange={handleChange}
-              dir="rtl"
             />
             <TextField
               margin="normal"
               required
               fullWidth
               name="password"
-              label="كلمة المرور"
-              type="password"
+              label="Password"
+              type={showPassword ? 'text' : 'password'}
               id="password"
               autoComplete="current-password"
               value={formData.password}
               onChange={handleChange}
-              dir="rtl"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <Button
               type="submit"
@@ -91,14 +113,14 @@ const Login = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              تسجيل الدخول
+              Login
             </Button>
-            <Box sx={{ textAlign: 'center', mt: 2 }}>
-              <Link href="/register" variant="body2" sx={{ mr: 2 }}>
-                ليس لديك حساب؟ سجل الآن
+            <Box sx={{ textAlign: 'center' }}>
+              <Link href="/forgot-password" variant="body2" sx={{ mr: 2 }}>
+                Forgot Password?
               </Link>
-              <Link href="/forgot-password" variant="body2">
-                نسيت كلمة المرور؟
+              <Link href="/register" variant="body2">
+                Don't have an account? Sign Up
               </Link>
             </Box>
           </form>
