@@ -9,15 +9,19 @@ import {
   Alert,
   Link,
   InputAdornment,
-  IconButton
+  IconButton,
+  useTheme,
+  useMediaQuery
 } from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Visibility, VisibilityOff, LockOutlined } from '@mui/icons-material';
 import axios from 'axios';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 
 const API_URL = 'http://localhost:5000';
 
 const Login = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
@@ -62,19 +66,70 @@ const Login = () => {
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
-          marginTop: 8,
+          minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          justifyContent: 'center',
+          padding: theme.spacing(2),
         }}
       >
-        <Paper elevation={3} sx={{ padding: 4, width: '100%' }}>
-          <Typography component="h1" variant="h5" align="center" gutterBottom>
-            Sign In
-          </Typography>
+        <Paper
+          elevation={6}
+          sx={{
+            padding: theme.spacing(4),
+            width: '100%',
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            borderRadius: '16px',
+            backdropFilter: 'blur(10px)',
+          }}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              mb: 3,
+            }}
+          >
+            <Box
+              sx={{
+                width: '64px',
+                height: '64px',
+                borderRadius: '50%',
+                backgroundColor: theme.palette.primary.main,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                mb: 2,
+              }}
+            >
+              <LockOutlined sx={{ color: 'white', fontSize: 32 }} />
+            </Box>
+            <Typography
+              component="h1"
+              variant="h4"
+              sx={{
+                fontWeight: 700,
+                color: theme.palette.primary.main,
+                mb: 1,
+              }}
+            >
+              Welcome Back
+            </Typography>
+            <Typography variant="body1" color="text.secondary" align="center">
+              Sign in to continue to your workspace
+            </Typography>
+          </Box>
 
           {error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
+            <Alert
+              severity="error"
+              sx={{
+                mb: 2,
+                borderRadius: '8px',
+              }}
+            >
               {error}
             </Alert>
           )}
@@ -91,6 +146,13 @@ const Login = () => {
               autoFocus
               value={formData.email}
               onChange={handleChange}
+              variant="outlined"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '12px',
+                },
+                mb: 2,
+              }}
             />
             <TextField
               margin="normal"
@@ -99,10 +161,16 @@ const Login = () => {
               name="password"
               label="Password"
               type={showPassword ? 'text' : 'password'}
-              id="password"
               autoComplete="current-password"
               value={formData.password}
               onChange={handleChange}
+              variant="outlined"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '12px',
+                },
+                mb: 3,
+              }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -121,17 +189,58 @@ const Login = () => {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{
+                mt: 1,
+                mb: 2,
+                py: 1.5,
+                borderRadius: '12px',
+                textTransform: 'none',
+                fontSize: '1.1rem',
+                fontWeight: 600,
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                '&:hover': {
+                  boxShadow: '0 6px 16px rgba(0,0,0,0.2)',
+                },
+              }}
             >
               Sign In
             </Button>
-            <Box sx={{ textAlign: 'center' }}>
-              <Link component={RouterLink} to="/register" variant="body2">
-                {"Don't have an account? Sign Up"}
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexDirection: isMobile ? 'column' : 'row',
+                gap: 1,
+              }}
+            >
+              <Link
+                component={RouterLink}
+                to="/forgot-password"
+                variant="body2"
+                sx={{
+                  color: theme.palette.primary.main,
+                  textDecoration: 'none',
+                  '&:hover': {
+                    textDecoration: 'underline',
+                  },
+                }}
+              >
+                Forgot password?
               </Link>
-              <br />
-              <Link component={RouterLink} to="/reset-password" variant="body2">
-                {"Forgot password?"}
+              <Link
+                component={RouterLink}
+                to="/register"
+                variant="body2"
+                sx={{
+                  color: theme.palette.primary.main,
+                  textDecoration: 'none',
+                  '&:hover': {
+                    textDecoration: 'underline',
+                  },
+                }}
+              >
+                Don't have an account? Sign Up
               </Link>
             </Box>
           </form>

@@ -8,13 +8,21 @@ import {
   Typography,
   Box,
   Link,
-  Alert
+  Alert,
+  useTheme,
+  useMediaQuery,
+  InputAdornment,
+  IconButton
 } from '@mui/material';
+import { PersonAddOutlined, Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
+import { Link as RouterLink } from 'react-router-dom';
 
 const API_URL = 'http://localhost:5000';
 
 const Register = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
@@ -24,6 +32,8 @@ const Register = () => {
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -37,7 +47,6 @@ const Register = () => {
     setError('');
     setSuccess('');
 
-    // Check if passwords match
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       return;
@@ -52,8 +61,6 @@ const Register = () => {
 
       if (response.data.userId) {
         setSuccess('Account created successfully! Redirecting to login page...');
-        
-        // Redirect to login page after 2 seconds
         setTimeout(() => {
           navigate('/login');
         }, 2000);
@@ -65,29 +72,94 @@ const Register = () => {
     }
   };
 
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleClickShowConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
-          marginTop: 8,
+          minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          justifyContent: 'center',
+          padding: theme.spacing(2),
         }}
       >
-        <Paper elevation={3} sx={{ padding: 4, width: '100%' }}>
-          <Typography component="h1" variant="h5" align="center" gutterBottom>
-            Create New Account
-          </Typography>
+        <Paper
+          elevation={6}
+          sx={{
+            padding: theme.spacing(4),
+            width: '100%',
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            borderRadius: '16px',
+            backdropFilter: 'blur(10px)',
+          }}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              mb: 3,
+            }}
+          >
+            <Box
+              sx={{
+                width: '64px',
+                height: '64px',
+                borderRadius: '50%',
+                backgroundColor: theme.palette.primary.main,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                mb: 2,
+              }}
+            >
+              <PersonAddOutlined sx={{ color: 'white', fontSize: 32 }} />
+            </Box>
+            <Typography
+              component="h1"
+              variant="h4"
+              sx={{
+                fontWeight: 700,
+                color: theme.palette.primary.main,
+                mb: 1,
+              }}
+            >
+              Create Account
+            </Typography>
+            <Typography variant="body1" color="text.secondary" align="center">
+              Join us to start managing your projects
+            </Typography>
+          </Box>
 
           {error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
+            <Alert
+              severity="error"
+              sx={{
+                mb: 2,
+                borderRadius: '8px',
+              }}
+            >
               {error}
             </Alert>
           )}
 
           {success && (
-            <Alert severity="success" sx={{ mb: 2 }}>
+            <Alert
+              severity="success"
+              sx={{
+                mb: 2,
+                borderRadius: '8px',
+              }}
+            >
               {success}
             </Alert>
           )}
@@ -104,6 +176,13 @@ const Register = () => {
               autoFocus
               value={formData.name}
               onChange={handleChange}
+              variant="outlined"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '12px',
+                },
+                mb: 2,
+              }}
             />
             <TextField
               margin="normal"
@@ -115,6 +194,13 @@ const Register = () => {
               autoComplete="email"
               value={formData.email}
               onChange={handleChange}
+              variant="outlined"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '12px',
+                },
+                mb: 2,
+              }}
             />
             <TextField
               margin="normal"
@@ -122,11 +208,31 @@ const Register = () => {
               fullWidth
               name="password"
               label="Password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               id="password"
               autoComplete="new-password"
               value={formData.password}
               onChange={handleChange}
+              variant="outlined"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '12px',
+                },
+                mb: 2,
+              }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <TextField
               margin="normal"
@@ -134,22 +240,72 @@ const Register = () => {
               fullWidth
               name="confirmPassword"
               label="Confirm Password"
-              type="password"
+              type={showConfirmPassword ? 'text' : 'password'}
               id="confirmPassword"
+              autoComplete="new-password"
               value={formData.confirmPassword}
               onChange={handleChange}
+              variant="outlined"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '12px',
+                },
+                mb: 3,
+              }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowConfirmPassword}
+                      edge="end"
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{
+                mt: 1,
+                mb: 2,
+                py: 1.5,
+                borderRadius: '12px',
+                textTransform: 'none',
+                fontSize: '1.1rem',
+                fontWeight: 600,
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                '&:hover': {
+                  boxShadow: '0 6px 16px rgba(0,0,0,0.2)',
+                },
+              }}
             >
               Create Account
             </Button>
-            <Box sx={{ textAlign: 'center' }}>
-              <Link href="/login" variant="body2">
-                Already have an account? Sign in
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Link
+                component={RouterLink}
+                to="/login"
+                variant="body2"
+                sx={{
+                  color: theme.palette.primary.main,
+                  textDecoration: 'none',
+                  '&:hover': {
+                    textDecoration: 'underline',
+                  },
+                }}
+              >
+                Already have an account? Sign In
               </Link>
             </Box>
           </form>
