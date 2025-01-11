@@ -13,7 +13,9 @@ import {
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
+
+const API_URL = 'http://localhost:5000';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -36,11 +38,19 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/users/login`, formData);
-      localStorage.setItem('token', response.data.token);
-      navigate('/');
+      console.log('Attempting to login with:', formData);
+      const response = await axios.post(`${API_URL}/api/users/login`, formData);
+      console.log('Login response:', response.data);
+      
+      if (response.data.userId) {
+        localStorage.setItem('userId', response.data.userId);
+        navigate('/dashboard');
+      } else {
+        setError('Invalid response from server');
+      }
     } catch (err) {
-      setError(err.response?.data?.msg || 'An error occurred while logging in');
+      console.error('Login error:', err);
+      setError(err.response?.data?.message || 'An error occurred while logging in');
     }
   };
 
@@ -60,7 +70,7 @@ const Login = () => {
       >
         <Paper elevation={3} sx={{ padding: 4, width: '100%' }}>
           <Typography component="h1" variant="h5" align="center" gutterBottom>
-            Login
+            Sign In
           </Typography>
 
           {error && (
@@ -113,11 +123,15 @@ const Login = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Login
+              Sign In
             </Button>
             <Box sx={{ textAlign: 'center' }}>
-              <Link href="/register" variant="body2">
+              <Link component={RouterLink} to="/register" variant="body2">
                 {"Don't have an account? Sign Up"}
+              </Link>
+              <br />
+              <Link component={RouterLink} to="/reset-password" variant="body2">
+                {"Forgot password?"}
               </Link>
             </Box>
           </form>

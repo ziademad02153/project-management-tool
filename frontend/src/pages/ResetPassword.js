@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import {
   Container,
   Paper,
@@ -11,34 +10,23 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 
+const API_URL = 'http://localhost:5000';
+
 const ResetPassword = () => {
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const { token } = useParams();
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
 
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
-
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}/api/users/reset-password/${token}`, {
-        password
-      });
-      setSuccess('Password has been reset successfully');
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
+      const response = await axios.post(`${API_URL}/api/users/reset-password`, { email });
+      setSuccess(response.data.message || 'Password reset instructions sent to your email');
     } catch (err) {
-      setError(err.response?.data?.msg || 'Error resetting password');
+      setError(err.response?.data?.message || 'An error occurred while requesting password reset');
     }
   };
 
@@ -74,24 +62,13 @@ const ResetPassword = () => {
               margin="normal"
               required
               fullWidth
-              name="password"
-              label="New Password"
-              type="password"
-              id="password"
-              autoComplete="new-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="confirmPassword"
-              label="Confirm Password"
-              type="password"
-              id="confirmPassword"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <Button
               type="submit"

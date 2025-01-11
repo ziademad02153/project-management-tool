@@ -12,10 +12,12 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 
+const API_URL = 'http://localhost:5000';
+
 const Register = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    username: '',
+    name: '',
     email: '',
     password: '',
     confirmPassword: ''
@@ -42,21 +44,24 @@ const Register = () => {
     }
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/users/register`, {
-        username: formData.username,
+      const response = await axios.post(`${API_URL}/api/users/register`, {
+        name: formData.name,
         email: formData.email,
         password: formData.password
       });
 
-      setSuccess('Account created successfully! Redirecting to login page...');
-      
-      // Redirect to login page after 2 seconds
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
-
+      if (response.data.userId) {
+        setSuccess('Account created successfully! Redirecting to login page...');
+        
+        // Redirect to login page after 2 seconds
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000);
+      } else {
+        setError('Invalid response from server');
+      }
     } catch (err) {
-      setError(err.response?.data?.msg || 'An error occurred while creating the account');
+      setError(err.response?.data?.message || 'An error occurred while creating the account');
     }
   };
 
@@ -92,26 +97,24 @@ const Register = () => {
               margin="normal"
               required
               fullWidth
-              id="username"
-              label="Username"
-              name="username"
-              autoComplete="username"
+              id="name"
+              label="Full Name"
+              name="name"
+              autoComplete="name"
               autoFocus
-              value={formData.username}
+              value={formData.name}
               onChange={handleChange}
-              dir="rtl"
             />
             <TextField
               margin="normal"
               required
               fullWidth
               id="email"
-              label="Email"
+              label="Email Address"
               name="email"
               autoComplete="email"
               value={formData.email}
               onChange={handleChange}
-              dir="rtl"
             />
             <TextField
               margin="normal"
@@ -124,7 +127,6 @@ const Register = () => {
               autoComplete="new-password"
               value={formData.password}
               onChange={handleChange}
-              dir="rtl"
             />
             <TextField
               margin="normal"
@@ -134,10 +136,8 @@ const Register = () => {
               label="Confirm Password"
               type="password"
               id="confirmPassword"
-              autoComplete="new-password"
               value={formData.confirmPassword}
               onChange={handleChange}
-              dir="rtl"
             />
             <Button
               type="submit"
@@ -147,9 +147,9 @@ const Register = () => {
             >
               Create Account
             </Button>
-            <Box textAlign="center">
+            <Box sx={{ textAlign: 'center' }}>
               <Link href="/login" variant="body2">
-                {"Already have an account? Login"}
+                Already have an account? Sign in
               </Link>
             </Box>
           </form>
